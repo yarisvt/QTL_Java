@@ -1,8 +1,5 @@
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +31,7 @@ public class GeneticLinkageMap
                 if (!referenceMarker.equals(currentMarker))
                 {
                     float distance = analyzedMarkers.get(referenceMarker).get(currentMarker);
-                    if (distance > biggestDistance)
+                    if (distance >= biggestDistance)
                     {
                         firstMarker = referenceMarker;
                         biggestDistance = distance;
@@ -64,7 +61,7 @@ public class GeneticLinkageMap
         {
             Collections.sort(this.markers);
             outputFile = new PrintWriter(fileName);
-            outputFile.println("group cm");
+            outputFile.println("group cM");
             for (Marker marker : this.markers)
             {
                 outputFile.println(marker.toString());

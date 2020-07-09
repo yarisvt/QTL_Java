@@ -29,6 +29,6 @@ public class Marker implements Comparable<Marker>
     @Override
     public int compareTo(Marker marker)
     {
-        return (int) (this.distance - marker.distance);
+        return Float.compare(this.getDistance(), marker.getDistance());
     }
 }
