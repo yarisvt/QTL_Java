@@ -2,15 +2,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class AnalyzeMarkers
 {
 
     private static final int LINES_TO_SKIP = 7;
-    private static final String MARKERS_INPUT_FILE = System.getProperty("user.dir") + File.separator + "CvixLer-MarkerSubset-LG1.txt";
-    private static final String OUTPUT_MARKERS = System.getProperty("user.dir") + File.separator + "output_markers.txt";
+    private static final String DATA_MAP = "data_files" + File.separator;
+    private static final String MARKERS_INPUT_FILE = System.getProperty("user.dir") + File.separator + DATA_MAP + "CvixLer-MarkerSubset-LG1.txt";
+    private static final String OUTPUT_MARKERS = System.getProperty("user.dir") + File.separator + DATA_MAP + "output_markers.txt";
 
     public static void main(String[] args)
     {
