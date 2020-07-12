@@ -3,36 +3,27 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
-public class GeneticLinkageMap
-{
-    private HashMap<String, HashMap<String, Float>> analyzedMarkers;
-    private ArrayList<Marker> markers;
+public class GeneticLinkageMap {
+    private final HashMap<String, HashMap<String, Float>> analyzedMarkers;
+    private final ArrayList<Marker> markers;
     private Marker firstMarker;
 
-    GeneticLinkageMap(HashMap<String, HashMap<String, Float>> analyzedMarkers)
-    {
+    GeneticLinkageMap(HashMap<String, HashMap<String, Float>> analyzedMarkers) {
         this.analyzedMarkers = analyzedMarkers;
         this.markers = new ArrayList<>();
         this.firstMarker = null;
 
     }
 
-    void findFurthestApart()
-    {
+    void findFurthestApart() {
         float biggestDistance = 0;
         String firstMarker = null;
-
-        for (String referenceMarker : this.analyzedMarkers.keySet())
-        {
-            for (String currentMarker : this.analyzedMarkers.keySet())
-            {
-                if (!referenceMarker.equals(currentMarker))
-                {
+        for (String referenceMarker : this.analyzedMarkers.keySet()) {
+            for (String currentMarker : this.analyzedMarkers.keySet()) {
+                if (!referenceMarker.equals(currentMarker)) {
                     float distance = analyzedMarkers.get(referenceMarker).get(currentMarker);
-                    if (distance >= biggestDistance)
-                    {
+                    if (distance >= biggestDistance) {
                         firstMarker = referenceMarker;
                         biggestDistance = distance;
                     }
@@ -43,40 +34,28 @@ public class GeneticLinkageMap
         this.markers.add(this.firstMarker);
     }
 
-    void createOtherMarkers()
-    {
+    void createOtherMarkers() {
         HashMap<String, Float> otherMarkers = this.analyzedMarkers.get(this.firstMarker.getMarkerName());
-        for (Map.Entry<String, Float> otherMarker : otherMarkers.entrySet())
-        {
-            float distance = Float.parseFloat(String.format("%.2f", otherMarker.getValue()));
-            Marker marker = new Marker(otherMarker.getKey(), distance);
-            this.markers.add(marker);
-        }
+        otherMarkers.forEach((key, value) -> {
+            float distance = Float.parseFloat(String.format("%.2f", value));
+            this.markers.add(new Marker(key, distance));
+        });
     }
 
-    void writeSortedMarkersToFile(String fileName)
-    {
+    void writeSortedMarkersToFile(String fileName) {
         PrintWriter outputFile = null;
-        try
-        {
+        try {
             Collections.sort(this.markers);
             outputFile = new PrintWriter(fileName);
             outputFile.println("group cM");
-            for (Marker marker : this.markers)
-            {
-                outputFile.println(marker.toString());
-            }
+            PrintWriter finalOutputFile = outputFile;
+            this.markers.forEach(marker -> finalOutputFile.println(marker.toString()));
 
-        }
-        catch (IOException ioe)
-        {
+        } catch (IOException ioe) {
             System.out.println("An error occured");
-        }
-        finally
-        {
+        } finally {
             assert outputFile != null;
             outputFile.close();
         }
-
     }
 }
