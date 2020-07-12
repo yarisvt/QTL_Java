@@ -22,7 +22,7 @@ public class GeneticLinkageMap {
         for (String referenceMarker : this.analyzedMarkers.keySet()) {
             for (String currentMarker : this.analyzedMarkers.keySet()) {
                 if (!referenceMarker.equals(currentMarker)) {
-                    float distance = analyzedMarkers.get(referenceMarker).get(currentMarker);
+                    float distance = this.analyzedMarkers.get(referenceMarker).get(currentMarker);
                     if (distance >= biggestDistance) {
                         firstMarker = referenceMarker;
                         biggestDistance = distance;

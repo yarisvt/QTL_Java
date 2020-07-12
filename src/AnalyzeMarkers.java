@@ -42,10 +42,11 @@ public class AnalyzeMarkers {
                     markers.put(markerName, new ArrayList<>());
                 } else if (line.startsWith(" ")) {
                     ArrayList<Character> bands = new ArrayList<>();
-                    char[] chars = line.toCharArray();
-                    for (char band : chars) {
-                        if (Arrays.asList('a', 'b', '-').contains(band)) bands.add(band);
-                    }
+
+                    line.chars()
+                            .filter(band -> Arrays.asList('a', 'b', '-').contains((char) band))
+                            .forEach(band -> bands.add((char) band));
+
                     markers.get(markerName).addAll(bands);
                 }
             }
@@ -85,16 +86,15 @@ public class AnalyzeMarkers {
     public static HashMap<String, HashMap<String, Float>> analyze_markers(HashMap<String, ArrayList<Character>> markers) {
         Map<String, ArrayList<Character>> suitableMarkers = getSuitableMarkers(markers);
         HashMap<String, HashMap<String, Float>> comparedMarkers = new HashMap<>();
-
-        for (Map.Entry<String, ArrayList<Character>> referenceEntry : suitableMarkers.entrySet()) {
-            comparedMarkers.put(referenceEntry.getKey(), new HashMap<>());
-            for (Map.Entry<String, ArrayList<Character>> currentEntry : suitableMarkers.entrySet()) {
-                if (!referenceEntry.getKey().equals(currentEntry.getKey())) {
-                    float distance = calculateRF(referenceEntry.getValue(), currentEntry.getValue());
-                    comparedMarkers.get(referenceEntry.getKey()).put(currentEntry.getKey(), distance);
+        suitableMarkers.forEach((refKey, refValue) -> {
+            comparedMarkers.put(refKey, new HashMap<>());
+            suitableMarkers.forEach((curKey, curValue) -> {
+                if (!refKey.equals(curKey)) {
+                    float distance = calculateRF(refValue, curValue);
+                    comparedMarkers.get(refKey).put(curKey, distance);
                 }
-            }
-        }
+            });
+        });
 
         return comparedMarkers;
     }
